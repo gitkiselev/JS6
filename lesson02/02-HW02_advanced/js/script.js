@@ -8,7 +8,11 @@ let week = [
 	'Saturday'
 ],
 date = new Date();
+let p1 = document.createElement('p');
+p1.textContent = 'Дни недели';
+document.body.appendChild(p1);
 let out = document.createElement('div');
+
 out.classList.add('week');
 document.body.appendChild(out);
 
@@ -25,6 +29,9 @@ for (let i = 0; i < week.length; i++) {
 }
 
 //2
+let p2 = document.createElement('p');
+p2.textContent = 'Строки, начинающиеся с цифр семь или три';
+document.body.appendChild(p2);
 let digits = document.createElement('div');
 digits.classList.add('digits');
 document.body.appendChild(digits);
