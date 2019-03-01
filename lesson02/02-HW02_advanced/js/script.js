@@ -8,7 +8,9 @@ let week = [
 	'Saturday'
 ],
 date = new Date();
-let out = document.querySelector('.week');
+let out = document.createElement('div');
+out.classList.add('week');
+document.body.appendChild(out);
 
 for (let i = 0; i < week.length; i++) {
 	
@@ -23,15 +25,17 @@ for (let i = 0; i < week.length; i++) {
 }
 
 //2
-let digits = document.querySelector('.digits');
+let digits = document.createElement('div');
+digits.classList.add('digits');
+document.body.appendChild(digits);
 let arr = [];
 for (let i = 0; i < 7; i++) {
 	let digit = prompt('Введите число, хотя бы одно чтоб начиналось с трех или  семи', '');
 	arr.push(digit);
 }
 for (let i = 0; i < arr.length; i++) {
-	if (arr[i].indexOf(3) == 0 || arr[i].indexOf(7) == 0) {
-		console.log(arr[i].indexOf(3));
+	if (arr[i].slice(0, 1) == 7 || arr[i].slice(0, 1) == 3) {
+		
 		digits.innerHTML += 'Эта строка из чисел начинается  с трех или семи: ' + arr[i] + '<br>';
 	}
 }
