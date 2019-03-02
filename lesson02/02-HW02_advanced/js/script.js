@@ -10,22 +10,31 @@ let week = [
 date = new Date();
 let p1 = document.createElement('p');
 p1.textContent = 'Дни недели';
+p1.style.cssText = 'font-weight: bold; font-size: 18px; font-family: Roboto';
 document.body.appendChild(p1);
 let out = document.createElement('div');
-
-out.classList.add('week');
-document.body.appendChild(out);
-
+	
 for (let i = 0; i < week.length; i++) {
+	let dayItem = document.createElement('p');
 	
 	if ((week[i] == 'Sunday' || week[i] == 'Saturday') && i == date.getDay()) {
-		out.innerHTML += '<strong><em>' + week[i] + '</em></strong><br>';
+		dayItem.style.cssText = "font-weight: bold; font-style: italic;";
+		dayItem.textContent += week[i];
+		
+		
 	 } else if (week[i] == 'Sunday' || week[i] == 'Saturday'){
-	 	out.innerHTML += '<strong>' + week[i] + '</strong><br>';
+			dayItem.style.cssText = 'font-weight: bold;';
+			dayItem.textContent += week[i];
+			
+			
 	
 	 } else {
-			out.innerHTML += week[i] + '<br>';
+			
+			dayItem.textContent += week[i];
+			
+			
 		}
+		document.body.appendChild(dayItem);
 }
 
 //2
@@ -33,16 +42,17 @@ let p2 = document.createElement('p');
 p2.textContent = 'Строки, начинающиеся с цифр семь или три';
 document.body.appendChild(p2);
 let digits = document.createElement('div');
-digits.classList.add('digits');
+p2.style.cssText = 'font-weight: bold; font-size: 18px; font-family: Roboto';
 document.body.appendChild(digits);
 let arr = [];
 for (let i = 0; i < 7; i++) {
+	let digitItem = document.createElement('p');
 	let digit = prompt('Введите число, хотя бы одно чтоб начиналось с трех или  семи', '');
 	arr.push(digit);
-}
-for (let i = 0; i < arr.length; i++) {
 	if (arr[i].slice(0, 1) == 7 || arr[i].slice(0, 1) == 3) {
 		
-		digits.innerHTML += 'Эта строка из чисел начинается  с трех или семи: ' + arr[i] + '<br>';
+		digitItem.textContent += 'Эта строка из чисел начинается  с трех или семи: ' + arr[i];
+		
 	}
+	document.body.appendChild(digitItem);
 }
