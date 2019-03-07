@@ -21,7 +21,7 @@ adv.parentNode.removeChild(adv);
 //adv.parentElement.removeChild(adv);
 
 //5 ask user
-let question = prompt('Ваше отношение к технике Apple?', '');
-let promptAnswer = document.getElementById('prompt');
-promptAnswer.textContent = question;
+let question = prompt('Ваше отношение к технике Apple?', ''),
+				promptAnswer = document.getElementById('prompt');
+				promptAnswer.textContent = question;
 
