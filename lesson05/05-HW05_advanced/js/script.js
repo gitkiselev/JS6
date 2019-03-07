@@ -8,14 +8,14 @@ function zeros(digit){
 	return digit;
 }
 function showDate(){
-	let currentDate = new Date();
-	let hours   = currentDate.getHours();
-	let minutes = currentDate.getMinutes();
-	let seconds = currentDate.getSeconds();
-	let day     = currentDate.getDay() + 1;
-	let month   = currentDate.getMonth() + 1;
-	let year    = currentDate.getFullYear();
-	let out     = document.getElementById('out');
+	let currentDate = new Date(),
+	hours   = currentDate.getHours(),
+	minutes = currentDate.getMinutes(),
+	seconds = currentDate.getSeconds(),
+	day     = currentDate.getDay() + 1,
+	month   = currentDate.getMonth() + 1,
+	year    = currentDate.getFullYear(),
+	out     = document.getElementById('out');
 	out.textContent = zeros(hours) +":" + zeros(minutes) +":"+
  	zeros(seconds) + ' ' + zeros(day) +"." + zeros(month) +"." + year;;
  	setTimeout(function() {//для красоты сделал setTimeout

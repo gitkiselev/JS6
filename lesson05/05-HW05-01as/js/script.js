@@ -1,6 +1,8 @@
 //1 menu
-let menuList = document.querySelector('.menu');
-let lastItem = document.createElement('li');
+let menuList = document.querySelector('.menu'),
+lastItem = document.createElement('li'),
+menuItems = document.querySelectorAll('.menu-item');
+menuList.insertBefore(menuItems[2], menuItems[1]);
 lastItem.classList.add('menu-item');
 lastItem.textContent = 'Пятый пункт';
 menuList.appendChild(lastItem);
