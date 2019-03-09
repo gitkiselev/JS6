@@ -77,8 +77,18 @@ let startBtn = document.getElementById('start'),
 					}
 				});
 				dataWrapper.addEventListener('click', function(e) {
+					for (var key in appData.expenses){// 2 доп
+						if (appData.expenses.hasOwnProperty(key)){
+										delete appData.expenses[key];
+						}
+					}
 					if (e.target.classList.contains('expenses-item-btn')) {
 						let sum = 0;
+
+						expensesValue.textContent = '';
+								appData.sumExpenses = 0;
+
+
 						for(let i = 0; i < expensesItem.length; i++) {
 							console.log('typing...');
 							let a = expensesItem[i].value,
@@ -135,8 +145,9 @@ let startBtn = document.getElementById('start'),
 					function checkFilled(fields) {
 						expensesBtn.disabled = true;
 						let sum = 0;
-						for(let i = 0; i < fields.length; i++) {
-							if(fields[i].value.length !== 0) {
+						
+						for (let i = 0; i < 2; i++) {
+							if(fields[i].value.length !== 0 && fields[++i].value.length > 0) {
 								
 								sum += 1;
 								console.log('Это поле заполнено');
@@ -146,12 +157,13 @@ let startBtn = document.getElementById('start'),
 								
 							}
 						}
-						if (sum > 3) {
+						if (sum > 0) {
 							//enabledBtn(expensesBtn);
 							expensesBtn.disabled = false;
-						} else if (sum < 4){
+						} else if (sum < 1){
 							expensesBtn.disabled = true;
 						}
+						
 					}
 					
 
