@@ -1,7 +1,7 @@
 window.onload = function(){
-	let tabs  		 = document.querySelectorAll('.info-header-tab');//заголовки табов
-	let tabsWrapper  = document.querySelector('.info-header');//обертка хедеров табов
-	let contents     = document.querySelectorAll('.info-tabcontent');
+	let tabs  		 = document.querySelectorAll('.info-header-tab'),//заголовки табов
+	tabsWrapper  = document.querySelector('.info-header'),//обертка хедеров табов
+	contents     = document.querySelectorAll('.info-tabcontent');
 
 
 	tabsWrapper.addEventListener('click', (e) => {
@@ -22,10 +22,10 @@ window.onload = function(){
 	//timer
 	let deadline = '2018-06-16';
 	function getTimeRemaining(endtime){
-		let t = Date.parse(endtime) - Date.parse(new Date()) - 10800000;
-		let seconds = Math.floor((t/1000) % 60);
-		let minutes = Math.floor((t/1000/60) % 60);
-		let hours = Math.floor((t/(1000*60*60)));
+		let t = Date.parse(endtime) - Date.parse(new Date()) - 10800000,
+		seconds = Math.floor((t/1000) % 60),
+		minutes = Math.floor((t/1000/60) % 60),
+		hours = Math.floor((t/(1000*60*60)));
 		return {
 			'total'  : t,
 			'hours'  : hours,
@@ -35,10 +35,10 @@ window.onload = function(){
 	};
 	
 	function setClock(id, endtime){
-		let timer   = document.getElementById(id);
-		let hours   = timer.querySelector('.hours');
-		let minutes = timer.querySelector('.minutes');
-		let seconds = timer.querySelector('.seconds');
+		let timer   = document.getElementById(id),
+		hours   = timer.querySelector('.hours'),
+		minutes = timer.querySelector('.minutes'),
+		seconds = timer.querySelector('.seconds');
 		function zeros(digit){
 			if(digit < 10){
 				digit = '0' + digit;
@@ -66,18 +66,18 @@ window.onload = function(){
 	setClock('timer', deadline);
 
 	//усложненное задание
-	var linkNav = document.querySelectorAll('[href^="#"]'),
+	let linkNav = document.querySelectorAll('[href^="#"]'),
     V = 0.5;  // скорость, может иметь дробное значение через точку
-		for (var i = 0; i < linkNav.length; i++) {
+		for (let i = 0; i < linkNav.length; i++) {
 		  linkNav[i].onclick = function(){
-		    var w = window.pageYOffset,//отступ сверху
+		    let w = window.pageYOffset,//отступ сверху
 		        hash = this.href.replace(/[^#]*(.*)/, '$1');//меняем местами
 		        t = document.querySelector(hash).getBoundingClientRect().top,
 		        start = null;
 		    requestAnimationFrame(step);
 		    function step(time) {
 		      if (start === null) start = time;
-		      var progress = time - start,
+		      let progress = time - start,
 		          r = (t < 0 ? Math.max(w - progress/V, w + t) : Math.min(w + progress/V, w + t));
 		      window.scrollTo(0,r);
 		      if (r != w + t) {requestAnimationFrame(step)} else {location.hash = hash}
@@ -87,33 +87,27 @@ window.onload = function(){
 		}
 			//HomeWork 9
 			//Modal
-			let more = document.querySelector('.more');
-			let info = document.querySelector('.info');
-			let desc = document.querySelectorAll('.description-btn');
-			let overlay = document.querySelector('.overlay');
-			let close = document.querySelector('.popup-close');
-			more.addEventListener('click', function(){
-				
-				
-					this.classList.add('more-splash');
-					overlay.style.display = 'block';
-					document.body.style.overflow = 'hidden';
-				
-				
-			});
-			info.addEventListener('click', function(e){
-				let target = e.target;
-				if(target.classList.contains('description-btn')){
-					//this.classList.add('more-splash');
+			//let more = document.querySelector('.more'),
+			//info = document.querySelector('.info'),
+			let desc = document.querySelectorAll('.description-btn'),
+			overlay = document.querySelector('.overlay'),
+			body = document.body,
+			close = document.querySelector('.popup-close');
+			body.addEventListener('click', function(e) {
+				if(e.target.classList.contains('more')){
+					desc.classList.add('more-splash');
 					overlay.style.display = 'block';
 					document.body.style.overflow = 'hidden';
 				}
-				
-			});
-			close.addEventListener('click', function(){
-				overlay.style.display = 'none';
-				this.classList.remove('more-splash');
-				document.body.style.overflow = '';
+				if(e.target.classList.contains('description-btn')){
+					overlay.style.display = 'block';
+					document.body.style.overflow = 'hidden';
+				}
+				if(e.target.classList.contains('popup-close')){
+					overlay.style.display = 'none';
+					close.classList.remove('more-splash');
+					document.body.style.overflow = '';
+				}
 			});
 
 }
