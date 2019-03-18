@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div id="id01"></div>
+
+<script>
+var xmlhttp = new XMLHttpRequest();
+var url = "cars.json";
+
+xmlhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var myArr = JSON.parse(JSON.stringify(cars.json));
+    myFunction(myArr);
+  }
+};
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(arr) {
+  var out = "";
+  var i;
+  for(i = 0; i < arr.length; i++) {
+    out+= `<div>${cars.name}</div>
+          <div>${cars.description}</div>
+          <div>${cars.price}</div>
+          <div>${cars.img}</div>
+          <div>${cars.category}</div>
+
+    `
+    
+  }
+  document.getElementById("id01").innerHTML = out;
+}
+</script>
+
+</body>
+</html>
