@@ -1,37 +1,82 @@
 <!DOCTYPE html>
+<head>
+		<meta charset="utf-8">
+		<title>cars.json</title> 
+		<link rel="stylesheet" href="normalize.css"> 
+   <link rel="stylesheet" href="style.css">
+	</head>
 <html>
 <body>
-
-<div id="id01"></div>
+	
+<div class="btn-group">
+		<div class="all active">All</div><div class="germany">Germany</div>
+		<div class="france">France</div><div class="italian">Italy</div>
+	</div>
+<div id="output">
+	
+</div>
 
 <script>
-var xmlhttp = new XMLHttpRequest();
+var xhr = new XMLHttpRequest();
 var url = "cars.json";
-
-xmlhttp.onreadystatechange = function() {
-  if (this.readyState == 4 && this.status == 200) {
-    var myArr = JSON.parse(JSON.stringify(cars.json));
-    myFunction(myArr);
+let out = document.getElementById('out');
+xhr.onreadystatechange = function() {
+  if (xhr.readyState == 4 && xhr.status == 200) {
+    var carsArray = JSON.parse(xhr.responseText);
+    myFunction(carsArray);
   }
 };
-xmlhttp.open("GET", url, true);
-xmlhttp.send();
+xhr.open("GET", url, true);
+xhr.send();
 
-function myFunction(arr) {
+function myFunction(carsArray) {
   var out = "";
-  var i;
-  for(i = 0; i < arr.length; i++) {
-    out+= `<div>${cars.name}</div>
-          <div>${cars.description}</div>
-          <div>${cars.price}</div>
-          <div>${cars.img}</div>
-          <div>${cars.category}</div>
-
-    `
-    
+  let divWrap = document.createElement('div');
+		divWrap.classList.add('cars__item');
+	let html = '';
+  for(let i = 0; i < carsArray["cars"].length; i++) {
+			html += `<div class="wrap ${carsArray["cars"][i]["category"]}"><h2 class="cars__name">${carsArray["cars"][i]["name"]}</h2>
+			<div>${carsArray["cars"][i]["description"]}</div>
+			<div>${carsArray["cars"][i]["price"]}</div>
+			<div class="cars__img"><img src="${carsArray["cars"][i]["img"]}" alt=""></div>
+			<div class="cars__country">${carsArray["cars"][i]["category"]}</div>
+			</div>
+			`;
   }
-  document.getElementById("id01").innerHTML = out;
+  output.innerHTML = html;
 }
+let btnGroup = document.getElementsByClassName('btn-group')[0],
+				block = document.getElementsByClassName('wrap');
+btnGroup.addEventListener('click', function(e){
+	
+	console.log(e.target);
+	let targetClass = e.target.getAttribute('class');
+
+	if(e.target.classList.contains('active')){
+		
+	 		return;//ничего не делаем, если пункт меню активен
+	 	} else {
+				for(let i = 0; i < btnGroup.children.length; i++){
+					btnGroup.children[i].classList.remove('active');
+				}
+
+				for(let i = 0; i < block.length; i++){
+					
+		  			
+					
+		  		block[i].style.display = 'none';//прячем все блоки
+		  		
+		  		if((block[i].classList.contains(targetClass)) || (e.target.classList.contains('all'))){
+							block[i].style.display = 'block';
+
+		  		}//отображаем необходимый блок
+						} 
+						e.target.classList.add('active');//обводка заголовков
+			}
+});
+
+
+
 </script>
 
 </body>

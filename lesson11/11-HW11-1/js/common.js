@@ -136,7 +136,7 @@ window.onload = function(){
 			statusMessage = document.createElement('div');
 			statusMessage.classList.add('status');
 			form.addEventListener('submit', function(e){
-				event.preventDefault();
+				e.preventDefault();
 				form.appendChild(statusMessage);
 				
 				let request = new XMLHttpRequest();
@@ -161,7 +161,13 @@ window.onload = function(){
 						}, 1000);
 						//statusMessage.innerHTML = message.loading;
 					} else if(request.readyState === 4 && request.status === 200){
-						statusMessage.innerHTML = message.success;
+						let pic1 = new Image();
+							pic1.src = 'img/complete.gif';//усложненное
+							statusMessage.appendChild(pic1);
+							setTimeout(function(){
+								statusMessage.innerHTML = '';
+							}, 1000);
+						//statusMessage.innerHTML = message.success;
 						
 					} else {
 						statusMessage.innerHTML = message.failure;
@@ -171,6 +177,11 @@ window.onload = function(){
 					input[i].value = '';
 				}
 			});
+
+
+
+
+
 			//Скрипт к контактной форме
   let message1 = {};
   message1.loading = "Загрузка...";
@@ -193,27 +204,43 @@ window.onload = function(){
   statusMessageCF.classList.add('status');
   let formDataCF = new FormData(contactForm);
 
+
+
+
+
+
   contactForm.addEventListener('submit', function(e){
-    event.preventDefault();
+    e.preventDefault();
     contactForm.appendChild(statusMessageCF);
     //AJAX for contact form
   let request1 = new XMLHttpRequest();
   request1.open("POST", "server.php");
-  request1.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-  request1.send(json1);
+		request1.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+		
+
+
+
+  
 	let obj1 = {};
 		formDataCF.forEach(function(value, key){
-			obj[key] = value;
+			obj1[key] = value;
 		});
 		
 		let json1 = JSON.stringify(obj1);
-		request.send(json1);
+		request1.send(json1);
   request1.addEventListener('readystatechange', function(){
     if(request1.readyState < 4){
       statusMessageCF.innerHTML = message1.loading;
     } else if(request1.readyState === 4){
       if(request1.status === 200 && request1.status < 300){
-        statusMessageCF.innerHTML = message1.success;
+							let pic2 = new Image();
+							pic2.src = 'img/complete.gif';//усложненное
+							statusMessage.appendChild(pic2);
+							setTimeout(function(){
+								statusMessage.innerHTML = '';
+							}, 1000);
+
+        //statusMessageCF.innerHTML = message1.success;
       } else {
         statusMessageCF.innerHTML = message1.failure;
       }

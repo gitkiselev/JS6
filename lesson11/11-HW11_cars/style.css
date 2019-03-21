@@ -1,0 +1,66 @@
+* {
+	font-family: 'Roboto';
+	
+}
+body {
+	background: gray;
+}
+*, :before, :after {
+	box-sizing: border-box;
+	font-family: 'Roboto';
+}
+#output {
+	max-width: 992px;
+	margin: 0 auto;
+	
+}
+.cars__item {
+	text-align: center;
+}
+.wrap {
+	display: block;
+	padding: 10px;
+	margin-bottom: 10px;
+	transition: all .3s linear;
+	background: #fff;
+}
+.wrap:hover {
+	-webkit-box-shadow: 0px 0px 40px 0px rgba(255, 255, 255, 0.75);
+-moz-box-shadow:    0px 0px 40px 0px rgba(255, 255, 255, 0.75);
+box-shadow:         0px 0px 40px 0px rgba(255, 255, 255, 0.75);
+}
+.cars__name {
+	font-size: 18px;
+	font-weight: bold;
+}
+.cars__img {
+	width: 100%;
+}
+.cars__img img {
+	width: 100%;
+}
+.btn-group {
+	max-width: 992px;
+	margin: 0 auto;
+	background: #fff;
+	margin-bottom: 10px;
+}
+.btn-group div {
+	width: 170px;
+	padding: 6px 0;
+	text-align: center;
+	color: #000;
+	display: inline-block;
+	background: aqua;
+	cursor: pointer;
+	margin: 10px;
+}
+.hide {
+	display: none;
+}
+.active {
+	border: 1px solid red;
+}
+.show {
+	display: block;
+}
