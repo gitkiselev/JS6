@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>increase number</title>
+</head>
+<body>
+	<button id="btn">Start increase</button>
+	<div id="out">0</div>
+	<script>
+		let num = 0;
+		let btn = document.getElementById('btn'),
+		out = document.getElementById('out');
+		btn.addEventListener('click', function(){
+			let a = setInterval(function() {
+			++num;
+			out.innerHTML = num;
+			if (out.innerHTML == '50'){
+			clearInterval(a);
+		}
+		}, 100);
+			
+		
+		});
+		
+		
+	</script>
+</body>
+</html>
