@@ -1,7 +1,7 @@
 'use strict';
 
 let path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+//const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 
 module.exports = {
@@ -39,8 +39,6 @@ module.exports = {
         }
       }
     ]
-  },
-  plugins: [
-    new UglifyJsPlugin()
-  ]
+  }
+   
 };
