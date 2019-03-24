@@ -1,0 +1,30 @@
+{
+  "name": "lesson15",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "dev": "webpack",
+    "build": "webpack --mode=production"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "description": "",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.0",
+    "babel-loader": "^8.0.5",
+    "core-js": "^2.6.5",
+    "es6-promise": "^4.2.6",
+    "es6-promise-promise": "^1.0.0",
+    "exports-loader": "^0.7.0",
+    "imports-loader": "^0.8.0",
+    "promise-polyfill": "8.1.0"
+  }
+}
