@@ -278,41 +278,94 @@ window.onload = function() {
   totalValue.innerHTML = 0;
 
   persons.addEventListener('change', function(e){
-     persons.value = persons.value.replace(/^0|[^\d]/g, '');
-       daysSum = +persons.value;
-    total = (daysSum + personsSum)*4000;
+			
+			let old = +totalValue.innerHTML;
+			
+			persons.value = persons.value.replace(/^0|[^\d]/g, '');
+					daysSum = +persons.value;
+					
+		total = (daysSum + personsSum)*4000;
 
-    if(restDays.value == ''){
-      totalValue.innerHTML = 0;
-    } else {
-      totalValue.innerHTML = total;
-    }
-     
-     
-  });
+		if(restDays.value == ''){
+			
+				totalValue.innerHTML = 0;
+				
+		} else {
+			
+				totalValue.innerHTML = total;
+				let finish = totalValue.innerHTML = total;
+				animateValue('total', old, finish);
+		}
+			
+			
+});
 
-  restDays.addEventListener('change', function(e){
-     
-      restDays.value = restDays.value.replace(/^0|[^\d]/g, '');
-     
-      daysSum = +restDays.value;
-    total = (daysSum + personsSum)*4000;
-    if(persons.value == ''){
-      totalValue.innerHTML = 0;
-    } else {
-      totalValue.innerHTML = total;
-    }
-     
-    
-  });
+restDays.addEventListener('change', function(e){
+	
+	let old = +totalValue.innerHTML;
+	
+	restDays.value = restDays.value.replace(/^0|[^\d]/g, '');
 
-  place.addEventListener('change', function(){
-    if(restDays.value == '' || persons.value == ''){
-      totalValue.innerHTML = 0;
-    } else {
-      let a = total;
-      
-      totalValue.innerHTML = a * this.options[this.selectedIndex].value;
-    }
-  });
+	daysSum = +restDays.value;
+total = (daysSum + personsSum)*4000;
+
+if(persons.value == ''){
+	
+	totalValue.innerHTML = 0;
+	
+} else {
+	//animateValue('total', total, totalValue, 1000);
+	totalValue.innerHTML = total;
+	let finish = totalValue.innerHTML = total;
+	animateValue('total', old, finish);
+}
+
+
+});
+
+place.addEventListener('change', function(){
+	
+	let old = +totalValue.innerHTML;
+	
+	if(restDays.value == '' || persons.value == ''){
+		
+			totalValue.innerHTML = 0;
+			
+	} else {
+			let a = total;
+			
+			
+			totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+			let finish = totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+			animateValue('total', old, finish);
+			
+	}
+});
 //end of calculator
+//animate digits
+function animateValue(id, start, end/*, duration*/) {
+	
+	//var range = end - start;
+	var current = start;
+	var increment = end > start? 100 : -100;
+	//var stepTime = Math.abs(Math.floor(duration / range));
+	var obj = document.getElementById(id);
+	
+	var timer = setInterval(function() {
+		toggleDisabledInputs(true);
+					current += increment,
+					obj.innerHTML = current;
+					if (current == end) {
+									clearInterval(timer);
+									toggleDisabledInputs(false);
+					}
+	}, 1);
+}
+
+function toggleDisabledInputs(bool){
+	console.log('toggle input');
+	let calcInputs = document.querySelectorAll('.counter-block-input');
+	for(let i = 0; i < calcInputs.length; i++){
+		calcInputs[i].disabled = bool;
+	}
+}
