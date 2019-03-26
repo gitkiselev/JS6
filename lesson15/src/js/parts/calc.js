@@ -1,52 +1,66 @@
-function calc(){
+function calc() {
+	let inputs = document.querySelectorAll('.counter-block-input'),
+	persons = document.querySelectorAll('.counter-block-input')[0],
+	restDay = document.querySelectorAll('.counter-block-input')[1],
+	place = document.getElementById('select'),
+	totalValue = document.getElementById('total');
 	
-  let persons = document.getElementsByClassName('counter-block-input')[0],
-   restDays = document.getElementsByClassName('counter-block-input')[1],
-   place = document.getElementById('select'),
-  totalValue = document.getElementById('total'),
-  personsSum = 0,
-  daysSum = 0,
-  total = 0;
-  totalValue.innerHTML = 0;
 
-  persons.addEventListener('change', function(){
-     persons.value = persons.value.replace(/^0|[^\d]/g, '');
-					personsSum = +persons.value;
-    total = (daysSum + personsSum)*4000;
+	function animateValue(obj, start, end, duration) {
+					let range = end - start,
+									current = start,
+									increment = end > start ? 1 : -1,
+									stepTime = Math.abs(Math.floor(duration / range)),
+									timer = setInterval(function () {
+													current += increment;
+													obj.innerHTML = current;
+													if (current == end) {
+																	clearInterval(timer);
+													}
+									}, stepTime);
+	}
 
-    if(restDays.value == ''){
-      totalValue.innerHTML = 0;
-    } else {
-      totalValue.innerHTML = total;
-    }
-     
-     
-  });
+	function validateCalcInput(input) {
+					if (!input.match("^[ 0-9]+$")) {
+									return input.slice(0, -1);
+					} else {
+									return input;
+					}
+	}
 
-  restDays.addEventListener('change', function(){
-     
-      restDays.value = restDays.value.replace(/^0|[^\d]/g, '');
-     
-      daysSum = +restDays.value;
-    total = (daysSum + personsSum)*4000;
-    if(persons.value == ''){
-      totalValue.innerHTML = 0;
-    } else {
-      totalValue.innerHTML = total;
-    }
-     
-    
-  });
+	function contCalc(people, days, place) {
+					return (people * days) * 10 * place;
+	}
 
-  place.addEventListener('change', function(){
-    if(restDays.value == '' || persons.value == ''){
-      totalValue.innerHTML = 0;
-    } else {
-      let a = total;
-      
-      totalValue.innerHTML = a * this.options[this.selectedIndex].value;
-    }
-  });
+	function checkCalcValue(input1, input2) {
+					if (input1.value != '' && input2.value != '' && input2.value != 0 && input1.value != 0) {
+									return true;
+					} else {
+									return false;
+					}
+	}
+
+	totalValue.innerHTML = 0;
+
+	
+inputs.forEach((item) => {
+					item.addEventListener('input',()=>{
+									item.value = validateCalcInput(item.value);
+					});
+
+					item.addEventListener('change', ()=>{
+									if (checkCalcValue(persons,restDay)) { 
+													
+													animateValue(totalValue,+totalValue.textContent,+contCalc(+persons.value,+restDay.value,+place.options[place.selectedIndex].value, 3000));
+									} else { totalValue.innerHTML = 0}
+					});
+
+	});
+	place.addEventListener('change', () => {
+					if (checkCalcValue(persons,restDay)) { 
+									animateValue(totalValue,+totalValue.textContent,+contCalc(+persons.value,+restDay.value,+place.options[place.selectedIndex].value, 3000));
+					} else { totalValue.innerHTML = 0}
+	});
+
 }
-
 export default calc;

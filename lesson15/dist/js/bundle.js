@@ -1566,91 +1566,84 @@ __webpack_require__.r(__webpack_exports__);
 var _Promise = typeof Promise === 'undefined' ? __webpack_require__(/*! es6-promise */ "./node_modules/es6-promise/dist/es6-promise.js").Promise : Promise;
 
 function ajax() {
-  var sendRequest = function sendRequest(target) {
-    var message = {
-      loading: "Загрузка....",
-      success: "Спасибо! Скоро мы с вами свяжемся!",
-      failure: "Что-то пошло не так...",
-      hide: ""
-    },
-        statusMessage = document.createElement("div"),
-        inputs = document.querySelectorAll("input"),
-        hideModal = function hideModal() {
-      var overlay = document.querySelector(".overlay");
-
-      if (overlay.style.display == "block") {
-        setTimeout(function () {
-          overlay.style.display = "none";
-          document.body.style.overflow = "";
-          statusMessage.innerHTML = message.hide;
-        }, 2000);
-      } else {
-        setTimeout(function () {
-          statusMessage.innerHTML = message.hide;
-        }, 2000);
+  var message = {
+    loading: 'Загрузка..',
+    saccess: 'Спасибо! Скоро мы с вами свяжемся...',
+    fail: 'Что-то пошло не так.'
+  };
+  var form = document.querySelector('form.main-form'),
+      contactForm = document.querySelector('form#form'),
+      tel = document.querySelectorAll('[type=tel]'),
+      statusMessage = document.createElement('div');
+  statusMessage.classList.add('status');
+  tel.forEach(function (item) {
+    item.addEventListener('input', function (e) {
+      if (!e.target.value.match("^[ 0-9\+]+$")) {
+        e.target.value = e.target.value.slice(0, -1);
       }
-    },
-        clearInputs = function clearInputs() {
-      inputs.forEach(function (item) {
-        item.value = "";
-      });
-    };
+    });
+  });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var req = sendForm(e);
+  });
+  contactForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var req = sendForm(e);
+  });
 
-    statusMessage.classList.add("status");
-    target.appendChild(statusMessage);
-    var formData = new FormData(target),
-        obj = {};
+  function postJson(obj, message) {
+    return new _Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', './server.php');
+
+      xhr.onload = function () {
+        if (this.status == 200) {
+          resolve(message.saccess);
+        } else {
+          var error = new Error(this.statusText);
+          error.code = this.status;
+          reject(message.fail);
+        }
+      };
+
+      xhr.onerror = function () {
+        reject(new Error(message.fail));
+      };
+
+      xhr.send(obj);
+    });
+  }
+
+  function sendForm(e) {
+    var form = e.target,
+        input = form.getElementsByTagName('input');
+    form.appendChild(statusMessage);
+    var req = new XMLHttpRequest();
+    req.open('POST', './server.php');
+    req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+    var formData = new FormData(form); /// раз html трогать нельзя - извращаемся.
+
+    for (var i = 0; i < input.length; i++) {
+      formData.delete(input[i].name);
+      formData.append(input[i].type, input[i].value);
+    }
+
+    var obj = {};
     formData.forEach(function (value, key) {
       obj[key] = value;
     });
-
-    var postData = function postData() {
-      return new _Promise(function (resolve, reject) {
-        var request = new XMLHttpRequest(),
-            json = JSON.stringify(obj);
-        request.open("POST", "server.php");
-        request.setRequestHeader("Content-type", "application/json; charset=utf-8");
-
-        request.onreadystatechange = function () {
-          if (request.readyState < 4) {
-            resolve();
-          } else if (request.readyState == 4 && request.status == 200) {
-            resolve();
-          } else {
-            reject();
-          }
-        };
-
-        request.send(json);
-      });
-    };
-
-    postData().then(function () {
-      return statusMessage.innerHTML = message.loading;
+    var json = JSON.stringify(obj);
+    postJson(json, message).then(function (text) {
+      return statusMessage.innerHTML = text;
+    }).catch(function (text) {
+      return statusMessage.innerHTML = text;
     }).then(function () {
-      return statusMessage.innerHTML = message.success;
-    }).catch(function () {
-      return statusMessage.innerHTML = message.failure;
-    }).then(function () {
-      return clearInputs();
-    }).then(function () {
-      return hideModal();
+      for (var _i = 0; _i < input.length; _i++) {
+        input[_i].value = '';
+      }
     });
-  };
-
-  document.body.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var target = e.target;
-    target.id == "form" || target.classList.contains("main-form") ? sendRequest(target) : "";
-  });
-  var formInputTel = document.querySelector(".popup-form__input");
-  formInputTel.addEventListener("input", function () {
-    formInputTel.value = formInputTel.value.replace(/[^+0-9]/g, "");
-  });
-  var inputContact = document.getElementsByTagName("input")[3];
-  inputContact.addEventListener("input", function () {
-    inputContact.value = inputContact.value.replace(/[^+0-9]/g, "");
-  });
+  }
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (ajax);
@@ -1667,47 +1660,68 @@ function ajax() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 function calc() {
-  //HW 13 calculator
-  var persons = document.getElementsByClassName('counter-block-input')[0],
-      restDays = document.getElementsByClassName('counter-block-input')[1],
+  var inputs = document.querySelectorAll('.counter-block-input'),
+      persons = document.querySelectorAll('.counter-block-input')[0],
+      restDay = document.querySelectorAll('.counter-block-input')[1],
       place = document.getElementById('select'),
-      totalValue = document.getElementById('total'),
-      personsSum = 0,
-      daysSum = 0,
-      total = 0;
+      totalValue = document.getElementById('total');
+
+  function animateValue(obj, start, end, duration) {
+    var range = end - start,
+        current = start,
+        increment = end > start ? 1 : -1,
+        stepTime = Math.abs(Math.floor(duration / range)),
+        timer = setInterval(function () {
+      current += increment;
+      obj.innerHTML = current;
+
+      if (current == end) {
+        clearInterval(timer);
+      }
+    }, stepTime);
+  }
+
+  function validateCalcInput(input) {
+    if (!input.match("^[ 0-9]+$")) {
+      return input.slice(0, -1);
+    } else {
+      return input;
+    }
+  }
+
+  function contCalc(people, days, place) {
+    return people * days * 10 * place;
+  }
+
+  function checkCalcValue(input1, input2) {
+    if (input1.value != '' && input2.value != '' && input2.value != 0 && input1.value != 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   totalValue.innerHTML = 0;
-  persons.addEventListener('change', function () {
-    persons.value = persons.value.replace(/^0|[^\d]/g, '');
-    personsSum = +persons.value;
-    total = (daysSum + personsSum) * 4000;
-
-    if (restDays.value == '') {
-      totalValue.innerHTML = 0;
-    } else {
-      totalValue.innerHTML = total;
-    }
-  });
-  restDays.addEventListener('change', function () {
-    restDays.value = restDays.value.replace(/^0|[^\d]/g, '');
-    daysSum = +restDays.value;
-    total = (daysSum + personsSum) * 4000;
-
-    if (persons.value == '') {
-      totalValue.innerHTML = 0;
-    } else {
-      totalValue.innerHTML = total;
-    }
+  inputs.forEach(function (item) {
+    item.addEventListener('input', function () {
+      item.value = validateCalcInput(item.value);
+    });
+    item.addEventListener('change', function () {
+      if (checkCalcValue(persons, restDay)) {
+        animateValue(totalValue, +totalValue.textContent, +contCalc(+persons.value, +restDay.value, +place.options[place.selectedIndex].value, 3000));
+      } else {
+        totalValue.innerHTML = 0;
+      }
+    });
   });
   place.addEventListener('change', function () {
-    if (restDays.value == '' || persons.value == '') {
-      totalValue.innerHTML = 0;
+    if (checkCalcValue(persons, restDay)) {
+      animateValue(totalValue, +totalValue.textContent, +contCalc(+persons.value, +restDay.value, +place.options[place.selectedIndex].value, 3000));
     } else {
-      var a = total;
-      totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+      totalValue.innerHTML = 0;
     }
   });
-} //end of calculator
-
+}
 
 /* harmony default export */ __webpack_exports__["default"] = (calc);
 
@@ -1810,7 +1824,7 @@ function slider() {
         currentSlide(i);
       }
     }
-  }); //end of slider
+  });
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (slider);
@@ -1828,15 +1842,13 @@ function slider() {
 __webpack_require__.r(__webpack_exports__);
 function smooth() {
   var linkNav = document.querySelectorAll('[href^="#"]'),
-      V = 0.5; // скорость, может иметь дробное значение через точку
+      V = 0.5;
 
   var _loop = function _loop(i) {
     linkNav[i].onclick = function () {
       var link = linkNav[i];
       var w = window.pageYOffset,
-          //отступ сверху
-      hash = link.href.replace(/[^#]*(.*)/, "$1"); //меняем местами
-
+          hash = link.href.replace(/[^#]*(.*)/, "$1");
       var t = document.querySelector(hash).getBoundingClientRect().top,
           start = null;
 
@@ -1994,7 +2006,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _parts_ajax__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./parts/ajax */ "./src/js/parts/ajax.js");
 /* harmony import */ var _parts_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./parts/calc */ "./src/js/parts/calc.js");
 /* harmony import */ var _parts_timer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./parts/timer */ "./src/js/parts/timer.js");
-//require('es6-promise').polyfill();
 __webpack_require__(/*! formdata-polyfill */ "./node_modules/formdata-polyfill/formdata.min.js");
 
 

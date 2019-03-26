@@ -1,92 +1,94 @@
 function ajax() {
-  let sendRequest = target => {
-    let message = {
-        loading: "Загрузка....",
-        success: "Спасибо! Скоро мы с вами свяжемся!",
-        failure: "Что-то пошло не так...",
-        hide: ""
-      },
-      statusMessage = document.createElement("div"),
-      inputs = document.querySelectorAll("input"),
-      hideModal = () => {
-        let overlay = document.querySelector(".overlay");
+	let message = {
+					loading: 'Загрузка..',
+					saccess: 'Спасибо! Скоро мы с вами свяжемся...',
+					fail: 'Что-то пошло не так.'
+	};
 
-        if (overlay.style.display == "block") {
-          setTimeout(() => {
-            overlay.style.display = "none";
-            document.body.style.overflow = "";
-            statusMessage.innerHTML = message.hide;
-          }, 2000);
-        } else {
-          setTimeout(() => {
-            statusMessage.innerHTML = message.hide;
-          }, 2000);
-        }
-      },
-      clearInputs = () => {
-        inputs.forEach(item => {
-          item.value = "";
-        });
-      };
+	let form = document.querySelector('form.main-form'),
+					contactForm = document.querySelector('form#form'),
+					tel = document.querySelectorAll('[type=tel]'),
+					statusMessage = document.createElement('div');
 
-    statusMessage.classList.add("status");
+	statusMessage.classList.add('status');
+	tel.forEach((item) => {
+					item.addEventListener('input', (e) => {
+									if (!e.target.value.match("^[ 0-9\+]+$")) {
+													e.target.value = e.target.value.slice(0, -1);
+									}
+					});
+	});
+	form.addEventListener('submit', (e) => {
 
-    target.appendChild(statusMessage);
+					e.preventDefault();
+					let req = sendForm(e);
 
-    let formData = new FormData(target),
-      obj = {};
 
-    formData.forEach(function(value, key) {
-      obj[key] = value;
-    });
-    let postData = () => {
-      return new Promise((resolve, reject) => {
-        let request = new XMLHttpRequest(),
-          json = JSON.stringify(obj);
-        request.open("POST", "server.php");
-        request.setRequestHeader(
-          "Content-type",
-          "application/json; charset=utf-8"
-        );
+	});
+	contactForm.addEventListener('submit', (e) => {
 
-        request.onreadystatechange = () => {
-          if (request.readyState < 4) {
-            resolve();
-          } else if (request.readyState == 4 && request.status == 200) {
-            resolve();
-          } else {
-            reject();
-          }
-        };
-        request.send(json);
-      });
-    };
-    postData()
-      .then(() => (statusMessage.innerHTML = message.loading))
-      .then(() => (statusMessage.innerHTML = message.success))
-      .catch(() => (statusMessage.innerHTML = message.failure))
-      .then(() => clearInputs())
-      .then(() => hideModal());
-  };
+					e.preventDefault();
+					let req = sendForm(e);
 
-  document.body.addEventListener("submit", e => {
-    e.preventDefault();
-    let target = e.target;
+	});
 
-    target.id == "form" || target.classList.contains("main-form")
-      ? sendRequest(target)
-      : "";
-  });
+	function postJson(obj, message) {
+					return new Promise(function (resolve, reject) {
 
-  let formInputTel = document.querySelector(".popup-form__input");
-  formInputTel.addEventListener("input", function() {
-    formInputTel.value = formInputTel.value.replace(/[^+0-9]/g, "");
-  });
+									var xhr = new XMLHttpRequest();
+									xhr.open('POST', './server.php');
 
-  let inputContact = document.getElementsByTagName("input")[3];
+									xhr.onload = function () {
+													if (this.status == 200) {
+																	resolve(message.saccess);
+													} else {
+																	var error = new Error(this.statusText);
+																	error.code = this.status;
+																	reject(message.fail);
+													}
+									};
 
-  inputContact.addEventListener("input", function() {
-    inputContact.value = inputContact.value.replace(/[^+0-9]/g, "");
-  });
+									xhr.onerror = function () {
+													reject(new Error(message.fail));
+									};
+
+									xhr.send(obj);
+					});
+	}
+function sendForm(e) {
+					let form = e.target,
+									input = form.getElementsByTagName('input');
+
+					form.appendChild(statusMessage);
+
+					let req = new XMLHttpRequest();
+					req.open('POST', './server.php');
+					req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+
+					let formData = new FormData(form);
+
+					
+					for (let i = 0; i < input.length; i++) {
+									formData.delete(input[i].name);
+									formData.append(input[i].type, input[i].value);
+					}
+
+					let obj = {};
+
+					formData.forEach(function (value, key) {
+									obj[key] = value;
+					});
+
+					let json = JSON.stringify(obj);
+
+					postJson(json, message).then((text) => statusMessage.innerHTML = text).catch((text) => statusMessage.innerHTML = text)
+									.then(() => {
+													for (let i = 0; i < input.length; i++) {
+																	input[i].value = '';
+													}
+									});
+
+	}
 }
 export default ajax;
