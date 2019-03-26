@@ -3,15 +3,36 @@ function form(){
         let message = {
                 loading: "Загрузка....",
                 success: "Спасибо! Скоро мы с вами свяжемся!",
-                failure: "Что-то пошло не так..."
+																failure: "Что-то пошло не так...",
+																hide: ""
             },
             statusMessage = document.createElement('div'),
             inputs = document.querySelectorAll('input'),
             clearInputs = () => {
                 inputs.forEach( item => { item.value = '';});
-            };
+												},
+												// hideModal = () => {
+												// 	let overlay = document.querySelector('.overlay');
+												// 	setTimeout(() => {
+												// 		overlay.style.display = 'none';
+												// 		//statusMessage.innerHTML = '';
+												// 	}, 1000);
+												// };
+												// removeStatus = () => {
+												// 	console.log('remove status');
+												// 	setTimeout(() => {
+												// 		statusMessage.innerHTML = '';
+												// 	}, 1000);
+													
+												// };
+												hideMessage = () => {
+													setTimeout(() => {
+														statusMessage.innerHTML = message.hide;
+													}, 1000);
+												}
         
-        statusMessage.classList.add('status');
+								statusMessage.classList.add('status');
+								let statusDiv = document.getElementsByClassName('status')[0];
         target.appendChild(statusMessage);
         
         let formData = new FormData(target),
@@ -43,8 +64,15 @@ function form(){
         postData()
             .then( () => statusMessage.innerHTML = message.loading)
             .then( () => statusMessage.innerHTML = message.success)
-            .catch( () => statusMessage.innerHTML = message.failure)
-            .then( () => clearInputs());
+												.catch( () => statusMessage.innerHTML = message.failure)
+												//.then( () => removeStatus())
+												.then( () => clearInputs())
+												.then( () => hideMessage());
+												
+												
+													
+												
+												
     };
     
     document.body.addEventListener('submit', e => {

@@ -1,6 +1,6 @@
 function modal(){
-	let desc = document.querySelectorAll('.description-btn'),
-			overlay = document.querySelector('.overlay'),
+	
+			let overlay = document.querySelector('.overlay'),
 			body = document.body,
 			close = document.querySelector('.popup-close');
 			body.addEventListener('click', (e) => {

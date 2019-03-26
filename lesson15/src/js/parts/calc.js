@@ -1,17 +1,17 @@
 function calc(){
 	//HW 13 calculator
-  let persons = document.getElementsByClassName('counter-block-input')[0];
-  let restDays = document.getElementsByClassName('counter-block-input')[1];
-  let place = document.getElementById('select');
-  let totalValue = document.getElementById('total');
-  let personsSum = 0;
-  let daysSum = 0;
-  let total = 0;
+  let persons = document.getElementsByClassName('counter-block-input')[0],
+   restDays = document.getElementsByClassName('counter-block-input')[1],
+   place = document.getElementById('select'),
+  totalValue = document.getElementById('total'),
+  personsSum = 0,
+  daysSum = 0,
+  total = 0;
   totalValue.innerHTML = 0;
 
-  persons.addEventListener('change', function(e){
+  persons.addEventListener('change', function(){
      persons.value = persons.value.replace(/^0|[^\d]/g, '');
-       daysSum = +persons.value;
+					personsSum = +persons.value;
     total = (daysSum + personsSum)*4000;
 
     if(restDays.value == ''){
@@ -23,7 +23,7 @@ function calc(){
      
   });
 
-  restDays.addEventListener('change', function(e){
+  restDays.addEventListener('change', function(){
      
       restDays.value = restDays.value.replace(/^0|[^\d]/g, '');
      
