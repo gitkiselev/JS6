@@ -1,11 +1,11 @@
 function smooth(){
 	 let linkNav = document.querySelectorAll('[href^="#"]'),
-    V = 0.5; // скорость, может иметь дробное значение через точку
+    V = 0.5; 
   for (let i = 0; i < linkNav.length; i++) {
     linkNav[i].onclick = () => {
       let link = linkNav[i];
-      let w = window.pageYOffset, //отступ сверху
-        hash = link.href.replace(/[^#]*(.*)/, "$1"); //меняем местами
+      let w = window.pageYOffset,
+        hash = link.href.replace(/[^#]*(.*)/, "$1");
       let t = document.querySelector(hash).getBoundingClientRect().top,
         start = null;
       let step = time => {

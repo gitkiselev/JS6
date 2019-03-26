@@ -1565,7 +1565,7 @@ module.exports = g;
 __webpack_require__.r(__webpack_exports__);
 var _Promise = typeof Promise === 'undefined' ? __webpack_require__(/*! es6-promise */ "./node_modules/es6-promise/dist/es6-promise.js").Promise : Promise;
 
-function form() {
+function ajax() {
   var sendRequest = function sendRequest(target) {
     var message = {
       loading: "Загрузка....",
@@ -1573,8 +1573,8 @@ function form() {
       failure: "Что-то пошло не так...",
       hide: ""
     },
-        statusMessage = document.createElement('div'),
-        inputs = document.querySelectorAll('input'),
+        statusMessage = document.createElement("div"),
+        inputs = document.querySelectorAll("input"),
         hideModal = function hideModal() {
       var overlay = document.querySelector(".overlay");
 
@@ -1592,11 +1592,11 @@ function form() {
     },
         clearInputs = function clearInputs() {
       inputs.forEach(function (item) {
-        item.value = '';
+        item.value = "";
       });
     };
 
-    statusMessage.classList.add('status');
+    statusMessage.classList.add("status");
     target.appendChild(statusMessage);
     var formData = new FormData(target),
         obj = {};
@@ -1608,8 +1608,8 @@ function form() {
       return new _Promise(function (resolve, reject) {
         var request = new XMLHttpRequest(),
             json = JSON.stringify(obj);
-        request.open('POST', 'server.php');
-        request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        request.open("POST", "server.php");
+        request.setRequestHeader("Content-type", "application/json; charset=utf-8");
 
         request.onreadystatechange = function () {
           if (request.readyState < 4) {
@@ -1638,22 +1638,22 @@ function form() {
     });
   };
 
-  document.body.addEventListener('submit', function (e) {
+  document.body.addEventListener("submit", function (e) {
     e.preventDefault();
     var target = e.target;
-    target.id == 'form' || target.classList.contains('main-form') ? sendRequest(target) : '';
+    target.id == "form" || target.classList.contains("main-form") ? sendRequest(target) : "";
   });
-  var formInputTel = document.querySelector('.popup-form__input');
-  formInputTel.addEventListener('input', function () {
-    formInputTel.value = formInputTel.value.replace(/[^+0-9]/g, '');
+  var formInputTel = document.querySelector(".popup-form__input");
+  formInputTel.addEventListener("input", function () {
+    formInputTel.value = formInputTel.value.replace(/[^+0-9]/g, "");
   });
-  var inputContact = document.getElementsByTagName('input')[3];
-  inputContact.addEventListener('input', function () {
-    inputContact.value = inputContact.value.replace(/[^+0-9]/g, '');
+  var inputContact = document.getElementsByTagName("input")[3];
+  inputContact.addEventListener("input", function () {
+    inputContact.value = inputContact.value.replace(/[^+0-9]/g, "");
   });
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (form);
+/* harmony default export */ __webpack_exports__["default"] = (ajax);
 
 /***/ }),
 

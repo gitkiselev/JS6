@@ -42,7 +42,7 @@ let showSlides = n => {
         currentSlide(i);
       }
     }
-  });//end of slider
+  });
 
 }
 export default  slider;

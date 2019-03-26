@@ -1,5 +1,5 @@
 function calc(){
-	//HW 13 calculator
+	
   let persons = document.getElementsByClassName('counter-block-input')[0],
    restDays = document.getElementsByClassName('counter-block-input')[1],
    place = document.getElementById('select'),
@@ -48,5 +48,5 @@ function calc(){
     }
   });
 }
-//end of calculator
+
 export default calc;

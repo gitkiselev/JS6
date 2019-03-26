@@ -1,4 +1,3 @@
-//require('es6-promise').polyfill();
 require('formdata-polyfill');
  import 'nodelist-foreach-polyfill';
 	import tab from './parts/tab';
