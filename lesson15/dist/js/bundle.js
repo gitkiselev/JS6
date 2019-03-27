@@ -1714,7 +1714,7 @@ function calc() {
   }
 
   function checkCalcValue(input1, input2) {
-    if (input1.value != '' && input2.value != '' && input2.value != 0 && input1.value != 0) {
+    if (input1.value != '' && input2.value != '' && input2.value[0] != 0 && input1.value[0] != 0) {
       return true;
     } else {
       return false;
