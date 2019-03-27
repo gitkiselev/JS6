@@ -1,94 +1,131 @@
-function ajax() {
-	let message = {
-					loading: 'Загрузка..',
-					saccess: 'Спасибо! Скоро мы с вами свяжемся...',
-					fail: 'Что-то пошло не так.'
-	};
-
-	let form = document.querySelector('form.main-form'),
-					contactForm = document.querySelector('form#form'),
-					tel = document.querySelectorAll('[type=tel]'),
-					statusMessage = document.createElement('div');
-
-	statusMessage.classList.add('status');
-	tel.forEach((item) => {
-					item.addEventListener('input', (e) => {
-									if (!e.target.value.match("^[ 0-9\+]+$")) {
-													e.target.value = e.target.value.slice(0, -1);
-									}
-					});
+function ajax(){
+	
+	//form in modal///////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	
+		let contactForm = document.getElementById('form'),
+	  	mainFormInput = document.querySelector(".popup-form__input");
+  
+	mainFormInput.addEventListener("input", function() {
+	  
+	  mainFormInput.value = mainFormInput.value.replace(/[^\d\+]/g, ""); //works
+	  if (mainFormInput.value[0] != "+") {
+		mainFormInput.value = "+";
+	  }
 	});
-	form.addEventListener('submit', (e) => {
-
-					e.preventDefault();
-					let req = sendForm(e);
-
-
+	let contactInput = contactForm.getElementsByTagName("input")[1]; //поле с телефоном
+  
+	contactInput.addEventListener("input", () =>  {
+	  
+	  contactInput.value = contactInput.value.replace(/[^\d\+]/g, ""); //works
+	  if (contactInput.value[0] != "+") {
+		contactInput.value = "+";
+	  }
 	});
-	contactForm.addEventListener('submit', (e) => {
+	
 
-					e.preventDefault();
-					let req = sendForm(e);
+  
+	
+	  document.body.addEventListener("submit", e =>  {
+	  	e.preventDefault();
+	  	if(e.target.id == 'form' || e.target.classList.contains('main-form')){
+	  		sendForm(e.target);
+	  	}
+	  	
+	  	
+	  });
 
-	});
 
-	function postJson(obj, message) {
-					return new Promise(function (resolve, reject) {
 
-									var xhr = new XMLHttpRequest();
-									xhr.open('POST', './server.php');
+	  
 
-									xhr.onload = function () {
-													if (this.status == 200) {
-																	resolve(message.saccess);
-													} else {
-																	var error = new Error(this.statusText);
-																	error.code = this.status;
-																	reject(message.fail);
-													}
-									};
+		function sendForm(elem) {
+		
+			
+			 let message = {
+                loading: "Загрузка....",
+                success: "Спасибо! Скоро мы с вами свяжемся!",
+																failure: "Что-то пошло не так...",
+																hide: ""
+            },
+            statusMessage = document.createElement('div'),
+            inputs = document.querySelectorAll('input'),
+            clearInputs = () => {
+                inputs.forEach( item => { item.value = '';});
+												},
+												hideModal = () => {
+													let overlay = document.querySelector('.overlay');
+													
+														if(overlay.style.display == 'block') {
+															setTimeout(() => {
+																overlay.style.display = 'none';
+																document.body.style.overflow = '';
+																statusMessage.innerHTML = message.hide;
+															}, 2000);
+														} else {
+															setTimeout(() => {
+																
+																statusMessage.innerHTML = message.hide;
+															}, 2000);
+														}
+													
+												};
+												
+        
+        statusMessage.classList.add('status');
 
-									xhr.onerror = function () {
-													reject(new Error(message.fail));
-									};
+		elem.appendChild(statusMessage);
+		let formData = new FormData(elem),
+			obj = {};
 
-									xhr.send(obj);
-					});
+			formData.forEach(function(value, key){
+				obj[key] = value;
+			});
+			
+			
+		function PostData() {
+		  return new Promise(function(resolve, reject) {
+			let request = new XMLHttpRequest();
+			let json = JSON.stringify(obj);
+			request.open("POST", "../../src/server.php");
+			
+			request.setRequestHeader(
+			  "Content-Type",
+			  "application/json; charset=utf-8"
+			);
+			
+			
+			
+			request.addEventListener("readystatechange", () =>  {
+			  if (request.readyState < 4) {
+				resolve();
+			  } else if (request.readyState === 4 && request.status == 200) {
+				
+				  resolve();
+				
+			  } else {
+				reject();
+			  }
+			});
+			request.send(json);
+		  });
+		} //end PostData
+  
+		
+  
+		PostData()
+		  .then( () => statusMessage.innerHTML = message.loading)
+												.then( () => statusMessage.innerHTML = message.success,
+												)
+            .catch( () => statusMessage.innerHTML = message.failure)
+												.then( () => clearInputs())
+												.then(() => hideModal());
+												
+	  
+	  
 	}
-function sendForm(e) {
-					let form = e.target,
-									input = form.getElementsByTagName('input');
-
-					form.appendChild(statusMessage);
-
-					let req = new XMLHttpRequest();
-					req.open('POST', './server.php');
-					req.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-
-
-					let formData = new FormData(form);
-
-					
-					for (let i = 0; i < input.length; i++) {
-									formData.delete(input[i].name);
-									formData.append(input[i].type, input[i].value);
-					}
-
-					let obj = {};
-
-					formData.forEach(function (value, key) {
-									obj[key] = value;
-					});
-
-					let json = JSON.stringify(obj);
-
-					postJson(json, message).then((text) => statusMessage.innerHTML = text).catch((text) => statusMessage.innerHTML = text)
-									.then(() => {
-													for (let i = 0; i < input.length; i++) {
-																	input[i].value = '';
-													}
-									});
-
-	}
-}
-export default ajax;
+	
+		};
+export default  ajax;
